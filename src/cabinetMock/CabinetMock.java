@@ -41,10 +41,8 @@ public class CabinetMock extends Thread {
 			try {
 				CabinetMock.log("Listening for a connection");
 
-				// Call accept() to receive the next connection
 				Socket socket = serverSocket.accept();
 
-				// Pass the socket to the RequestHandler thread for processing
 				RequestHandler requestHandler = new RequestHandler(socket);
 				requestHandler.start();
 			} catch (IOException e) {
@@ -53,8 +51,6 @@ public class CabinetMock extends Thread {
 		}
 	}
 
-	// log counter neden artýyor?
-// bir hata veya duraklama olduðunda hangi iþlem adýmýnda olduðunu anlamak için olabilir hata yoksa da yapýlan tüm iþlemler ekrana basýlmýþ oluyo 
 	static void log(String entry) {
 		CabinetMock.logCounter++;
 		System.out.println(CabinetMock.logCounter + "\t" + entry + "\t[Size of Message: " + entry.length() + "]");
@@ -76,7 +72,6 @@ public class CabinetMock extends Thread {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// Baðlantýnýn bitmemesi için burayý kapatabiliriz
 		// server.stopServer();
 		// CabinetMock.log("Server stopped");
 		// System.exit(0);
@@ -106,9 +101,6 @@ class RequestHandler extends Thread {
 	private long tempSetTime;
 	private float tempChangeSpeed;
 
-	// request handler classý var ama içine bir þey almýyor
-	// içine Socket gönderilmiþ o socket için atanan iþlemler burdan mý baþlýyor
-	// yani?
 	public RequestHandler(Socket socket) {
 		this.socket = socket;
 		this.slots = new String[20];
@@ -125,17 +117,11 @@ class RequestHandler extends Thread {
 		try {
 			CabinetMock.log("Received a connection");
 
-			// Get input and output streams
-			// BufferedReader, bir girdi akýþýndaki metni (bir dosya gibi) karakterleri,
-			// dizileri veya satýrlarý sorunsuz bir þekilde okuyan karakterleri
-			// tamponlayarak okuyan Java sýnýfýdýr.
+
 			BufferedReader fromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			PrintWriter toClient = new PrintWriter(socket.getOutputStream(), true);
-			// Write out our header to the client
 			CabinetMock.log("Cabinet started. Waiting client to connect...");
 
-			// Echo lines back to the client until the client closes the connection or we
-			// receive an empty line
 			String line;
 			boolean cont = true;
 			do {
@@ -145,7 +131,6 @@ class RequestHandler extends Thread {
 				}
 			} while (cont);
 
-			// Close our connection
 			fromClient.close();
 			toClient.close();
 			socket.close();
@@ -157,7 +142,6 @@ class RequestHandler extends Thread {
 		}
 	}
 
-//Alýnan mesajýn ilk kýsmýnda STRT yazýyosa case STRT'da Cabinet startup -> INIT diye devam ediyor 
 	private boolean processMessage(String line, PrintWriter toClient) throws InterruptedException {
 		boolean retVal = true;
 		if (line.length() <= 0)
@@ -174,7 +158,6 @@ class RequestHandler extends Thread {
 				break;
 			}
 			CabinetMock.log("SENDING - Cabinet will startup soon...");
-			// System.out.println(this.processStartMessage(tokenizer));
 			toClient.println(this.processStartMessage(tokenizer));
 			this.awaited = MessageType.INIT;
 			this.actTemp = Float.MIN_VALUE;
@@ -301,7 +284,6 @@ class RequestHandler extends Thread {
 			break;
 		}
 		case SETTARGET: {
-//			messages.add("SETTARGET|70.5|180|3|5"); //Target Temperature | TimeFrame[secs] | ToleranceRate[%]
 
 			this.setTargetTemp((String) tokenizer.nextElement(), (String) tokenizer.nextElement(),
 					(String) tokenizer.nextElement(), (String) tokenizer.nextElement());
@@ -404,7 +386,6 @@ class RequestHandler extends Thread {
 		return retVal;
 	}
 
-	// INIT adýmýnda girilen slota examinee atanýyor
 	private String processInitMessage(StringTokenizer tokenizer) {
 		// Expected message: "1|1545678"; // SlotNumber | Examinee-ID
 		int slot = Integer.parseInt(tokenizer.nextToken());
