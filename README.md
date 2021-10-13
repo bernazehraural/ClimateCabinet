@@ -5,4 +5,4 @@
 While we coded the presentation layer of the project with Swing, we also used Java language in the business layer and data layer. We used phpMyAdmin technology and MySQL language during database creation and connection to the project. By taking commands from the server to the machine with mock data, we ensured that the machine stays in communication with the data it received from the client.
 
 ### Documentation
-You can find the details of the project [here] (https://docs.google.com/document/d/1leOeWmwekceLmFI3TwyVO_s3fVmp0byBMvGBQ4ZLqq0/edit?usp=sharing).
+You can find the details of the project [here] (https://docs.google.com/document/d/1leOeWmwekceLmFI3TwyVO_s3fVmp0byBMvGBQ4ZLqq0/edit?usp=sharing/) .
